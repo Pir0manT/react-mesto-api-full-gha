@@ -4,5 +4,32 @@ services:
     build:
       context: backend
     container_name: backend
+    image: mesto/backend
+    restart: always
+    environment:
+      - NODE_ENV=production
+    networks:
+      - express-mongo
+      - react-express
+      - grafana-loki
+    depends_on:
+      - mongo
     ports:
       - "3000:3000"
+  mongo:
+    restart: always
+    image:  mongo:4.4-focal
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - express-mongo
+    expose:
+      - 27017
+
+networks:
+  express-mongo:
+  react-express:
+  grafana-loki:
+
+volumes:
+  mongodb:

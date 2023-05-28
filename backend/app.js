@@ -9,7 +9,7 @@ const errorsHandler = require('./middlewares/handelError')
 
 require('dotenv').config()
 
-const { PORT = 3000, DB_PATH = 'mongodb://127.0.0.1:27017/mestodb' } =
+const { PORT = 3000, DB_PATH = 'mongodb://mongo:27017/mestodb' } =
   process.env
 
 const app = express()
