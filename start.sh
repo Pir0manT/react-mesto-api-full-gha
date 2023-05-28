@@ -33,7 +33,7 @@ if [[ -z $api_base_url ]] || [[ $api_base_url != https:* ]] || [[ $api_base_url 
   # Запрос значения переменной API_BASE_URL у пользователя
   while true; do
     read -p "Пожалуйста, введите значение для API_BASE_URL (должно начинаться с https: и не заканчиваться на /): " api_base_url
-    if [[ $api_base_url == https:* ]] && [[ $api_base_url != */ ]]; then
+    if [[ $api_base_url == https://* ]] && [[ $api_base_url != */ ]]; then
       break
     else
       echo "Неверное значение. Попробуйте еще раз."
