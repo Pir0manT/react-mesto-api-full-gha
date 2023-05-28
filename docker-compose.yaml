@@ -8,6 +8,7 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+      - JWT-SECRET=85353ab2edfacd45adcb8a9b27c3187df2663355dba48fdb23d0c2184246881a
     networks:
       - express-mongo
       - react-express
