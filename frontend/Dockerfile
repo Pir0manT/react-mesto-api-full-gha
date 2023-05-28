@@ -11,7 +11,7 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/.nginx/ssl-options.conf /etc/nginx/conf.d/ssl-options.conf
+COPY --from=build /app/.nginx/ssl-options.conf /etc/letsencrypt/ssl-options.conf
 COPY --from=build /app/.nginx/certs /etc/letsencrypt
 
 WORKDIR /usr/share/nginx/html
