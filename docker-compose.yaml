@@ -1,9 +1,8 @@
-version: '3.8'
+version: '3.3'
 services:
   backend:
     build:
-      context: ./backend
-      target: production
+      context: backend
     container_name: backend
     ports:
       - "3000:3000"

@@ -1,0 +1,19 @@
+.popup__message {
+  text-align: center;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  max-width: 358px;
+  margin: 0 auto 60px;
+  color: #000;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__message {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 auto 50px;
+    max-width: 244px;
+  }
+}
+
