@@ -2,7 +2,8 @@ import { useHttp } from './http.hook'
 
 export const useAuth = () => {
   const { request, error, clearError } = useHttp()
-  const _apiBase = 'https://auth.nomoreparties.co'
+  const _apiBase =
+    process.env.REACT_APP_API_BASE_URL || 'https://auth.nomoreparties.co'
 
   const registerUser = async (email, password) => {
     return request({
