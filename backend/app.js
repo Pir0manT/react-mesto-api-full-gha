@@ -4,12 +4,12 @@ const mongoose = require('mongoose')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const { errors } = require('celebrate')
-const { dotenv } = require('dotenv')
+const { config } = require('dotenv')
 const routes = require('./routes')
 const errorsHandler = require('./middlewares/handelError')
 
 if (process.env.NODE_ENV === 'production') {
-  dotenv.config()
+  config()
 }
 
 const { PORT = 3000, DB_PATH = 'mongodb://mongo:27017/mestodb' } = process.env
