@@ -29,11 +29,11 @@ fi
 
 # Проверка установлена ли переменная API_BASE_URL в файле .env и соответствует ли она указанным правилам
 api_base_url=$(grep "API_BASE_URL" .env | cut -d '=' -f2)
-if [[ -z $api_base_url ]] || [[ $api_base_url != https://* ]] || [[ $api_base_url == */ ]]; then
+if [[ -z $api_base_url ]] || [[ $api_base_url != http* ]] || [[ $api_base_url == */ ]]; then
   # Запрос значения переменной API_BASE_URL у пользователя
   while true; do
-    read -p "Пожалуйста, введите значение для API_BASE_URL (должно начинаться с https: и не заканчиваться на /): " api_base_url
-    if [[ $api_base_url == https://* ]] && [[ $api_base_url != */ ]]; then
+    read -p "Пожалуйста, введите полное имя домена (FQDN) где будет располагаться сервер API (должно начинаться с http и не заканчиваться на /): " api_base_url
+    if [[ $api_base_url == http* ]] && [[ $api_base_url != */ ]]; then
       break
     else
       echo "Неверное значение. Попробуйте еще раз."

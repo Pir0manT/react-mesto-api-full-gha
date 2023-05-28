@@ -1,5 +1,21 @@
 version: '3.3'
 services:
+  frontend:
+    build:
+      context: frontend
+      args:
+        - API_BASE_URL=${API_BASE_URL}
+    container_name: mesto-frontend
+    image: mesto/frontend
+    restart: always
+    networks:
+      - react-express
+    depends_on:
+      - mongo
+      - backend
+    ports:
+      - "80:80"
+
   backend:
     build:
       context: backend
@@ -17,6 +33,7 @@ services:
       - mongo
     ports:
       - "3000:3000"
+
   mongo:
     restart: always
     image:  mongo:4.4-focal
