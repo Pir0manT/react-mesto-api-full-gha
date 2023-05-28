@@ -10,8 +10,14 @@ if ! which openssl > /dev/null; then
   exit 1
 fi
 
+# Проверка наличия файла .env
+if [ ! -f .env ]; then
+  # Создание файла .env
+  touch .env
+fi
+
 # Проверка наличия и длины секретной строки в файле .env
-if ! grep -q "^JWT_SECRET=.\{32\}" .env.local; then
+if ! grep -q "^JWT_SECRET=.\{32\}" .env; then
   # Генерация секретной строки и добавление ее в файл .env
   echo "JWT_SECRET=$(openssl rand -base64 32)" >> .env
 fi
