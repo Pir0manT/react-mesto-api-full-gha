@@ -1,7 +1,7 @@
 FROM node:lts-alpine as build
 
 ARG API_BASE_URL
-ENV API_BASE_URL=$API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$API_BASE_URL
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
