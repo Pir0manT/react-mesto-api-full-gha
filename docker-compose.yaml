@@ -25,7 +25,7 @@ services:
     environment:
       - NODE_ENV=production
       - JWT_SECRET=${JWT_SECRET}
-      - BASE_URL=${BASE_URL}
+      - BASE_URL=${SITE_BASE_URL}
     networks:
       - express-mongo
       - react-express

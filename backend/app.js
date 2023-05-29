@@ -13,20 +13,26 @@ if (process.env.NODE_ENV === 'production') {
   config()
 }
 
-const { PORT = 3000, DB_PATH = 'mongodb://mongo:27017/mestodb' } = process.env
+const {
+  PORT = 3000,
+  DB_PATH = 'mongodb://mongo:27017/mestodb',
+  BASE_URL = 'http://localhost:3001',
+} = process.env
 
 const app = express()
 
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(cookieParser())
-app.use(cors(({
-  origin: process.env.BASE_URL,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  credentials: true
-}))
+app.use(
+  cors({
+    origin: BASE_URL,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  })
+)
 app.use(routes)
 app.use(errors())
 app.use(errorsHandler)

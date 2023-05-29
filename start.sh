@@ -46,7 +46,7 @@ if [[ -z $api_base_url ]] || [[ $api_base_url != http* ]] || [[ $api_base_url ==
 fi
 
 # Проверка установлена ли переменная BASE_URL в файле .env и соответствует ли она указанным правилам
-base_url=$(grep "BASE_URL" .env | cut -d '=' -f2)
+base_url=$(grep "SITE_BASE_URL" .env | cut -d '=' -f2)
 if [[ -z $base_url ]] || [[ $base_url != http* ]] || [[ $base_url == */ ]]; then
   # Запрос значения переменной BASE_URL у пользователя
   while true; do
@@ -59,9 +59,10 @@ if [[ -z $base_url ]] || [[ $base_url != http* ]] || [[ $base_url == */ ]]; then
   done
 
   # Запись переменной BASE_URL в файл .env
-  sed -i "/BASE_URL/d" .env # Удаление старого значения переменной BASE_URL из файла .env (если оно есть)
-  echo "BASE_URL=$base_url" >> .env # Добавление нового значения переменной BASE_URL в файл .env
+  sed -i "/SITE_BASE_URL/d" .env # Удаление старого значения переменной BASE_URL из файла .env (если оно есть)
+  echo "SITE_BASE_URL=$base_url" >> .env # Добавление нового значения переменной BASE_URL в файл .env
 fi
+
 
 
 # Проверка наличия и длины секретной строки в файле .env
