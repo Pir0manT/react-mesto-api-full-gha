@@ -1,42 +1,57 @@
-import { useContext } from 'react'
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+const Cards = require('../models/card')
+const { handleError, FORBIDDEN, StatusCodeError } = require('../utils/errors')
 
-function Card({ card, handleClick, handleLikeClick, handleDeleteClick }) {
-  const { name, link, owner, likes } = card
-  const currentUser = useContext(CurrentUserContext)
-  const itsMyCard = owner._id === currentUser._id
-  const isLiked = likes.some((like) => like._id === currentUser._id)
+const getCards = (req, res, next) =>
+  Cards.find({})
+    .populate(['owner', 'likes'])
+    .then((card) => res.send(card))
+    .catch((err) => handleError(err, next))
 
-  return (
-    <li className="element">
-      {itsMyCard && (
-        <button
-          className="element__delete link-opacity"
-          type="button"
-          aria-label="удалить"
-          onClick={handleDeleteClick}
-        />
-      )}
-      <img
-        className="element__image"
-        src={link}
-        alt={name}
-        onClick={handleClick}
-      />
-      <div className="element__description">
-        <h2 className="element__title">{name}</h2>
-        <div className="element__like_container">
-          <button
-            className={`element__heart ${isLiked && 'element__heart-active'}`}
-            type="button"
-            aria-label="нравится"
-            onClick={handleLikeClick}
-          />
-          <div className="element__heart-count">{likes.length}</div>
-        </div>
-      </div>
-    </li>
-  )
+const createCard = (req, res, next) => {
+  const { name, link } = req.body
+  const owner = req.user._id
+  return Cards.create({ name, link, owner })
+    .then((newCard) => {
+      Cards.findById(newCard._id)
+        .populate(['owner', 'likes'])
+        .then((card) => res.status(201).send(card))
+    })
+    .catch((err) => handleError(err, next))
 }
 
-export default Card
+const deleteCard = (req, res, next) => {
+  const { cardId } = req.params
+
+  return Cards.findById(cardId)
+    .orFail()
+    .then((card) => {
+      if (card.owner.toString() === req.user._id)
+        Cards.findByIdAndRemove(cardId)
+          .orFail()
+          .then((deletedCard) => res.send(deletedCard))
+      else throw new StatusCodeError(FORBIDDEN)
+    })
+    .catch((err) => handleError(err, next))
+}
+
+const toggleLike = (req, res, next, isLiked = true) => {
+  const { cardId } = req.params
+  return Cards.findByIdAndUpdate(
+    cardId,
+    isLiked
+      ? { $addToSet: { likes: req.user._id } }
+      : { $pull: { likes: req.user._id } },
+    { new: true }
+  )
+    .orFail()
+    .populate(['owner', 'likes'])
+    .then((card) => res.send(card))
+    .catch((err) => handleError(err, next))
+}
+
+module.exports = {
+  getCards,
+  createCard,
+  deleteCard,
+  toggleLike,
+}
