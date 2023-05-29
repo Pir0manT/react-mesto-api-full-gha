@@ -32,7 +32,7 @@ api_base_url=$(grep "API_BASE_URL" .env | cut -d '=' -f2)
 if [[ -z $api_base_url ]] || [[ $api_base_url != http* ]] || [[ $api_base_url == */ ]]; then
   # Запрос значения переменной API_BASE_URL у пользователя
   while true; do
-    read -p "Пожалуйста, введите полное имя домена (FQDN) где будет располагаться сервер API (должно начинаться с http и не заканчиваться на /): " api_base_url
+    read -p "Пожалуйста, введите полное имя домена (FQDN) где будет располагаться сервер API (должно начинаться с http(s) и не заканчиваться на /): " api_base_url
     if [[ $api_base_url == http* ]] && [[ $api_base_url != */ ]]; then
       break
     else
@@ -44,6 +44,25 @@ if [[ -z $api_base_url ]] || [[ $api_base_url != http* ]] || [[ $api_base_url ==
   sed -i "/API_BASE_URL/d" .env # Удаление старого значения переменной API_BASE_URL из файла .env (если оно есть)
   echo "API_BASE_URL=$api_base_url" >> .env # Добавление нового значения переменной API_BASE_URL в файл .env
 fi
+
+# Проверка установлена ли переменная BASE_URL в файле .env и соответствует ли она указанным правилам
+base_url=$(grep "BASE_URL" .env | cut -d '=' -f2)
+if [[ -z $base_url ]] || [[ $base_url != http* ]] || [[ $base_url == */ ]]; then
+  # Запрос значения переменной BASE_URL у пользователя
+  while true; do
+    read -p "Пожалуйста, введите полное имя домена (FQDN) где будет располагаться этот сайт (должно начинаться с http(s) и не заканчиваться на /): " base_url
+    if [[ $base_url == http* ]] && [[ $base_url != */ ]]; then
+      break
+    else
+      echo "Неверное значение. Попробуйте еще раз."
+    fi
+  done
+
+  # Запись переменной BASE_URL в файл .env
+  sed -i "/BASE_URL/d" .env # Удаление старого значения переменной BASE_URL из файла .env (если оно есть)
+  echo "BASE_URL=$base_url" >> .env # Добавление нового значения переменной BASE_URL в файл .env
+fi
+
 
 # Проверка наличия и длины секретной строки в файле .env
 if ! grep -q "^JWT_SECRET=.\{32\}" .env; then

@@ -20,7 +20,13 @@ const app = express()
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(cors(({
+  origin: process.env.BASE_URL,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  credentials: true
+}))
 app.use(routes)
 app.use(errors())
 app.use(errorsHandler)
