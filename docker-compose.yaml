@@ -28,7 +28,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - BASE_URL=${SITE_BASE_URL}
       - LOGGER_BASE_URL=http://loki:3100
-      - DB_PATH=mongodb://mongodb:27017/mestodb
+      - DB_PATH=mongodb://mongo:27017/mestodb
     networks:
       - express-mongo
       - react-express
