@@ -128,8 +128,8 @@ Docker.
 
 
 ## Ссылки:
-- Frontend: https://mesto.top61.ru/
-- Backend: https://api-mesto.top61.ru/
-- Logger: https://mesto.top61.ru/logs/
-- IP-адрес 95.31.196.116
+- Frontend https://mesto.top61.ru/
+- Backend https://api-mesto.top61.ru/
+- Logger https://mesto.top61.ru/logs/
+- IP 95.31.196.116
 
