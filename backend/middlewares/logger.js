@@ -1,12 +1,12 @@
 const { createLogger, transports, format } = require('winston')
-const lokiTransport = require('winston-loki')
+const LokiTransport = require('winston-loki')
 
 const { NODE_ENV, LOGGER_BASE_URL = 'http://localhost:3100' } = process.env
 
 const logger = createLogger({
   transports: [
     NODE_ENV === 'production'
-      ? new lokiTransport({
+      ? new LokiTransport({
           host: LOGGER_BASE_URL,
           labels: { app: 'mesto' },
           json: true,

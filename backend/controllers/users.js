@@ -90,14 +90,13 @@ const login = (req, res, next) => {
     .catch((err) => handleError(err, next))
 }
 
-const logout = (req, res) => {
-  return res
+const logout = (req, res) =>
+  res
     .clearCookie('jwt', {
       httpOnly: true,
       sameSite: true,
     })
     .send({ message: 'Logged out successfully' })
-}
 
 module.exports = {
   getUsers,
