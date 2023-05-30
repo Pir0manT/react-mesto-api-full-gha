@@ -19,6 +19,12 @@ export const useAuth = () => {
     })
   }
 
+  const logoutUser = async () => {
+    return request({
+      url: `${_apiBase}/logout`,
+    })
+  }
+
   const getToken = async (jwt) => {
     return request({
       url: `${_apiBase}/users/me`,
@@ -29,5 +35,5 @@ export const useAuth = () => {
       },
     })
   }
-  return { loginUser, registerUser, getToken, error, clearError }
+  return { loginUser, logoutUser, registerUser, getToken, error, clearError }
 }

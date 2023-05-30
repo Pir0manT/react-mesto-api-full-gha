@@ -8,7 +8,7 @@ const {
   validationLogin,
   validationCreateUser,
 } = require('../middlewares/validations')
-const { login, createUser } = require('../controllers/users')
+const { login, createUser, logout } = require('../controllers/users')
 
 const { NODE_ENV = 'development', MAX_AUTH_ATTEMPTS = 5 } = process.env
 
@@ -23,6 +23,7 @@ const authLimiter = rateLimit({
 
 router.post('/signin', [validationLogin, authLimiter], login)
 router.post('/signup', [validationCreateUser, authLimiter], createUser)
+router.post('/logout', logout)
 
 router.use(auth)
 router.use('/users', usersRouter)

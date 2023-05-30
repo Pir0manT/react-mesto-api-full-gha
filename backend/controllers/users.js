@@ -90,6 +90,15 @@ const login = (req, res, next) => {
     .catch((err) => handleError(err, next))
 }
 
+const logout = (req, res) => {
+  return res
+    .clearCookie('jwt', {
+      httpOnly: true,
+      sameSite: true,
+    })
+    .send({ message: 'Logged out successfully' })
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -98,4 +107,5 @@ module.exports = {
   updateAvatar,
   getCurrentUser,
   login,
+  logout,
 }

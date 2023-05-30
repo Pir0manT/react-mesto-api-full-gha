@@ -44,7 +44,7 @@ function App() {
   })
   const navigate = useNavigate()
 
-  const { loginUser, registerUser, getToken, error } = useAuth()
+  const { loginUser, logoutUser, registerUser, getToken, error } = useAuth()
 
   function onRegister(email, password) {
     registerUser(email, password)
@@ -88,6 +88,7 @@ function App() {
     setEmailName(null)
     navigate('/sign-in')
     localStorage.removeItem('jwt')
+    logoutUser()
   }
 
   useEffect(() => {
@@ -97,7 +98,7 @@ function App() {
         .then((res) => {
           if (res) {
             setIsLoggedIn(true)
-            setEmailName(res.data.email)
+            setEmailName(res.email)
           }
         })
         .catch(() => {
