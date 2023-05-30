@@ -6,8 +6,10 @@ const cookieParser = require('cookie-parser')
 const { errors } = require('celebrate')
 const { config } = require('dotenv')
 const cors = require('cors')
+const responseTime = require('response-time')
 const routes = require('./routes')
 const errorsHandler = require('./middlewares/handelError')
+const { requestLogger, errorLogger } = require('./middlewares/logger')
 
 if (process.env.NODE_ENV === 'production') {
   config()
@@ -15,8 +17,8 @@ if (process.env.NODE_ENV === 'production') {
 
 const {
   PORT = 3000,
-  DB_PATH = 'mongodb://mongo:27017/mestodb',
-  BASE_URL = 'http://localhost:3001',
+  DB_PATH = 'mongodb://127.0.0.1:27017/mestodb',
+  BASE_URL = 'http://localhost',
 } = process.env
 
 const app = express()
@@ -33,7 +35,11 @@ app.use(
     credentials: true,
   })
 )
+
+app.use(responseTime(requestLogger))
+
 app.use(routes)
+app.use(errorLogger)
 app.use(errors())
 app.use(errorsHandler)
 
