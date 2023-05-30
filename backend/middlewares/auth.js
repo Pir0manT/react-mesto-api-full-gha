@@ -7,9 +7,8 @@ module.exports = (req, res, next) => {
     token = req.cookies.jwt
   } else {
     const { authorization } = req.headers
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-      throw new StatusCodeError(UNAUTHORIZED)
-    }
+    if (!authorization || !authorization.startsWith('Bearer '))
+      return next(new StatusCodeError(UNAUTHORIZED))
     token = authorization.replace('Bearer ', '')
   }
   const { NODE_ENV, JWT_SECRET } = process.env
@@ -22,8 +21,8 @@ module.exports = (req, res, next) => {
         : '85353ab2edfacd45adcb8a9b27c3187df2663355dba48fdb23d0c2184246881a'
     )
   } catch (err) {
-    throw new StatusCodeError(UNAUTHORIZED)
+    return next(new StatusCodeError(UNAUTHORIZED))
   }
   req.user = payload
-  next()
+  return next()
 }

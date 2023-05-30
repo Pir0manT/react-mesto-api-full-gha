@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit')
 const auth = require('../middlewares/auth')
 const usersRouter = require('./users')
 const cardsRouter = require('./cards')
-const { NOT_FOUND } = require('../utils/errors')
+const { NOT_FOUND, StatusCodeError } = require('../utils/errors')
 const {
   validationLogin,
   validationCreateUser,
@@ -34,8 +34,8 @@ router.use(auth)
 router.use('/users', usersRouter)
 router.use('/cards', cardsRouter)
 
-router.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Service not found' })
+router.use((req, res, next) => {
+  next(new StatusCodeError(NOT_FOUND))
 })
 
 module.exports = router

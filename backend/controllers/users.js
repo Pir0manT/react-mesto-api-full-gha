@@ -8,15 +8,15 @@ const getUsers = (req, res, next) =>
     .then((users) => res.send(users))
     .catch((err) => handleError(err, next))
 
-const getUser = (req, res, next) => {
-  const { userId } = req.params
-  return Users.findById(userId)
-    .orFail()
-    .then((user) => {
-      res.send(user)
-    })
-    .catch((err) => handleError(err, next))
-}
+// const getUser = (req, res, next) => {
+//   const { userId } = req.params
+//   return Users.findById(userId)
+//     .orFail()
+//     .then((user) => {
+//       res.send(user)
+//     })
+//     .catch((err) => handleError(err, next))
+// }
 
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body
@@ -36,35 +36,68 @@ const createUser = (req, res, next) => {
     .catch((err) => handleError(err, next))
 }
 
-const updateProfile = (req, res, next) => {
-  const { name, about } = req.body
-  return Users.findByIdAndUpdate(
-    req.user._id,
-    { name, about },
-    { new: true, runValidators: true }
-  )
+// const updateProfile = (req, res, next) => {
+//   const { name, about } = req.body
+//   return Users.findByIdAndUpdate(
+//     req.user._id,
+//     { name, about },
+//     { new: true, runValidators: true }
+//   )
+//     .orFail()
+//     .then((user) => res.send(user))
+//     .catch((err) => handleError(err, next))
+// }
+//
+// const updateAvatar = (req, res, next) => {
+//   const { avatar } = req.body
+//   return Users.findByIdAndUpdate(
+//     req.user._id,
+//     { avatar },
+//     { new: true, runValidators: true }
+//   )
+//     .orFail()
+//     .then((user) => res.send(user))
+//     .catch((err) => handleError(err, next))
+// }
+
+const updateUser = (req, res, next, updateData) =>
+  Users.findByIdAndUpdate(req.user._id, updateData, {
+    new: true,
+    runValidators: true,
+  })
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => handleError(err, next))
+
+const updateProfile = (req, res, next) => {
+  const { name, about } = req.body
+  return updateUser(req, res, next, { name, about })
 }
 
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body
-  return Users.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    { new: true, runValidators: true }
-  )
-    .orFail()
-    .then((user) => res.send(user))
-    .catch((err) => handleError(err, next))
+  return updateUser(req, res, next, { avatar })
 }
 
-const getCurrentUser = (req, res, next) =>
-  Users.findById(req.user._id)
+// const getCurrentUser = (req, res, next) =>
+//   Users.findById(req.user._id)
+//     .orFail()
+//     .then((user) => res.send(user))
+//     .catch((err) => handleError(err, next))
+
+const findUser = (req, res, next, userId) =>
+  Users.findById(userId)
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => handleError(err, next))
+
+const getCurrentUser = (req, res, next) =>
+  findUser(req, res, next, req.user._id)
+
+const getUser = (req, res, next) => {
+  const { userId } = req.params
+  return findUser(req, res, next, userId)
+}
 
 const login = (req, res, next) => {
   const { email, password } = req.body

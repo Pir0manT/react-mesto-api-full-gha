@@ -1,5 +1,4 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
@@ -24,7 +23,7 @@ const {
 const app = express()
 
 app.use(helmet())
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(cookieParser())
 app.use(
   cors({
@@ -51,6 +50,13 @@ db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', () => {
   console.log('Connected to MongoDB')
 })
+
+// Создавать какие либо конфиги в корне приложения
+// из которых потом чего то экспортировать/импортировать
+// считаю ненужным и бесполезным захламлением кода!
+// Все необходимые переменные окружения корректно устанавливаются при сборке/запуске
+// docker-контейнеров, они же описаны в README для тех, кто захочет все собрать ручками
+// см. файл start.sh в корне проекта
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`)

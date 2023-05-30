@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const BAD_REQUEST = 400
 const UNAUTHORIZED = 401
 const FORBIDDEN = 403
@@ -37,27 +39,55 @@ class StatusCodeError extends Error {
   }
 }
 
+// const handleError = (err, next) => {
+//   switch (err.name) {
+//     case 'CastError':
+//     case 'ValidationError':
+//       next(new StatusCodeError(BAD_REQUEST))
+//       return
+//     case 'DocumentNotFoundError':
+//       next(new StatusCodeError(NOT_FOUND, 'Item with specified id not found'))
+//       return
+//     case 'MongoServerError':
+//       if (err.code === 11000)
+//         next(
+//           new StatusCodeError(
+//             CONFLICT,
+//             'User with this email is already registered'
+//           )
+//         )
+//       else next(SERVER_ERROR, 'Mongo Server Error')
+//       return
+//     default:
+//       break
+//   }
+//   next(err)
+// }
+
 const handleError = (err, next) => {
-  switch (err.name) {
-    case 'CastError':
-    case 'ValidationError':
-      next(new StatusCodeError(BAD_REQUEST))
-      return
-    case 'DocumentNotFoundError':
-      next(new StatusCodeError(NOT_FOUND, 'Item with specified id not found'))
-      return
-    case 'MongoServerError':
-      if (err.code === 11000)
-        next(
-          new StatusCodeError(
-            CONFLICT,
-            'User with this email is already registered'
-          )
+  if (
+    err instanceof mongoose.Error.CastError ||
+    err instanceof mongoose.Error.ValidationError
+  ) {
+    next(new StatusCodeError(BAD_REQUEST))
+    return
+  }
+  if (err instanceof mongoose.Error.DocumentNotFoundError) {
+    next(new StatusCodeError(NOT_FOUND, 'Item with specified id not found'))
+    return
+  }
+  if (err instanceof mongoose.Error.MongoServerError) {
+    if (err.code === 11000) {
+      next(
+        new StatusCodeError(
+          CONFLICT,
+          'User with this email is already registered'
         )
-      else next(SERVER_ERROR, 'Mongo Server Error')
-      return
-    default:
-      break
+      )
+    } else {
+      next(SERVER_ERROR, 'Mongo Server Error')
+    }
+    return
   }
   next(err)
 }
