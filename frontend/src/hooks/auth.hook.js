@@ -25,15 +25,15 @@ export const useAuth = () => {
     })
   }
 
-  const getToken = async (jwt) => {
-    return request({
-      url: `${_apiBase}/users/me`,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`,
-      },
-    })
-  }
-  return { loginUser, logoutUser, registerUser, getToken, error, clearError }
+  // const getToken = async (jwt) => {
+  //   return request({
+  //     url: `${_apiBase}/users/me`,
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${jwt}`,
+  //     },
+  //   })
+  // }
+  return { loginUser, logoutUser, registerUser, error, clearError }
 }

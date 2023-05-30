@@ -44,7 +44,7 @@ function App() {
   })
   const navigate = useNavigate()
 
-  const { loginUser, logoutUser, registerUser, getToken, error } = useAuth()
+  const { loginUser, logoutUser, registerUser, error } = useAuth()
 
   function onRegister(email, password) {
     registerUser(email, password)
