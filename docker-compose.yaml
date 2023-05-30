@@ -10,6 +10,7 @@ services:
     restart: always
     networks:
       - react-express
+      - grafana-loki
     depends_on:
       - mongo
       - backend
@@ -32,6 +33,7 @@ services:
       - grafana-loki
     depends_on:
       - mongo
+      - loki
     ports:
       - "3000:3000"
 
@@ -46,6 +48,57 @@ services:
     expose:
       - 27017
 
+  loki:
+    build:
+      context: loki
+      dockerfile: Dockerfile
+    container_name: mesto-loki
+    image: mesto/loki
+    expose:
+      - 3100
+    volumes:
+      - loki_data:/tmp
+    command: -config.file=/etc/loki/loki-config.yaml
+    networks:
+      - grafana-loki
+
+
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - loki
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    image: grafana/grafana:latest
+    container_name: mesto-grafana
+    expose:
+      - 3000
+    networks:
+      - grafana-loki
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+
 networks:
   express-mongo:
   react-express:
@@ -53,3 +106,5 @@ networks:
 
 volumes:
   mongodb:
+  loki_data:
+  grafana_data:
