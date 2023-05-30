@@ -68,7 +68,7 @@ function App() {
   function onLogin(email, password) {
     loginUser(email, password)
       .then((res) => {
-        localStorage.setItem('jwt', res.token)
+        //localStorage.setItem('jwt', res.token)
         setIsLoggedIn(true)
         setEmailName(email)
         navigate('/')
@@ -86,25 +86,27 @@ function App() {
   function onSignOut() {
     setIsLoggedIn(false)
     setEmailName(null)
-    navigate('/sign-in')
-    localStorage.removeItem('jwt')
     logoutUser()
+    navigate('/sign-in')
+    //localStorage.removeItem('jwt')
   }
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt')
-    if (jwt) {
-      getToken(jwt)
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true)
-            setEmailName(res.email)
-          }
-        })
-        .catch(() => {
-          console.error('Error: ' + error)
-        })
-    }
+    //const jwt = localStorage.getItem('jwt')
+    //if (jwt) {
+    //  getToken(jwt)
+    api
+      .getProfile()
+      .then((res) => {
+        if (res) {
+          setIsLoggedIn(true)
+          setEmailName(res.email)
+        }
+      })
+      .catch(() => {
+        console.error('Error: ' + error)
+      })
+    //  }
   }, [])
 
   useEffect(() => {
