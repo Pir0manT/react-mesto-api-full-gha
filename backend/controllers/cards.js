@@ -3,6 +3,7 @@ const { handleError, FORBIDDEN, StatusCodeError } = require('../utils/errors')
 
 const getCards = (req, res, next) =>
   Cards.find({})
+    .populate(['owner', 'likes'])
     .then((card) => res.send(card))
     .catch((err) => handleError(err, next))
 
@@ -10,7 +11,11 @@ const createCard = (req, res, next) => {
   const { name, link } = req.body
   const owner = req.user._id
   return Cards.create({ name, link, owner })
-    .then((card) => res.status(201).send(card))
+    .then((newCard) => {
+      Cards.findById(newCard._id)
+        .populate(['owner', 'likes'])
+        .then((card) => res.status(201).send(card))
+    })
     .catch((err) => handleError(err, next))
 }
 
@@ -39,6 +44,7 @@ const toggleLike = (req, res, next, isLiked = true) => {
     { new: true }
   )
     .orFail()
+    .populate(['owner', 'likes'])
     .then((card) => res.send(card))
     .catch((err) => handleError(err, next))
 }
