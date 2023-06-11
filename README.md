@@ -55,7 +55,7 @@ Docker.
 
 Клонировать репозиторий:
 
-    git clone https://github.com/Pir0manT/react-mesto-auth.git
+    git clone https://github.com/Pir0manT/react-mesto-api-full-gha.git
 
 Отредактировать файл конфигурации сервера Nginx в каталоге: 
 
