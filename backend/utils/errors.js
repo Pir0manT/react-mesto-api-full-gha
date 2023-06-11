@@ -76,7 +76,7 @@ const handleError = (err, next) => {
     next(new StatusCodeError(NOT_FOUND, 'Item with specified id not found'))
     return
   }
-  if (err instanceof mongoose.Error.MongoServerError) {
+  if (err.name === 'MongoServerError') {
     if (err.code === 11000) {
       next(
         new StatusCodeError(
